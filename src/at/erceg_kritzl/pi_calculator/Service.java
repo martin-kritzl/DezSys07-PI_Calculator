@@ -1,5 +1,3 @@
-package at.erceg_kritzl.pi_calculator;
-
 import java.util.List;
 
 public interface Service {
@@ -15,5 +13,7 @@ public interface Service {
 	public List<String> getServerNames();
 
 	public abstract Service(URI ownUri);
+
+	public abstract URI getUri();
 
 }

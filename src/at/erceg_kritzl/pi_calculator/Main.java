@@ -1,5 +1,3 @@
-package at.erceg_kritzl.pi_calculator;
-
 public class Main {
 
 	private Client client;

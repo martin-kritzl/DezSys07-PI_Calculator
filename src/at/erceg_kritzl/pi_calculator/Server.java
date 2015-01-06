@@ -1,11 +1,19 @@
-package at.erceg_kritzl.pi_calculator;
-
 public class Server implements Calculator, Serializable {
 
 	private Calculator alg;
 
-	public Server(URI balancerUri, Calculator alg) {
+	private String name;
 
+	public Server(URI balancerUri, Calculator alg, String name) {
+
+	}
+
+	public String getName() {
+		return null;
+	}
+
+	public Calculator getAlorithm() {
+		return null;
 	}
 
 

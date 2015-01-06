@@ -1,5 +1,3 @@
-package at.erceg_kritzl.pi_calculator;
-
 import java.util.List;
 
 public class CalcService implements Service {
@@ -48,6 +46,14 @@ public class CalcService implements Service {
 	 */
 	public Service(URI ownUri) {
 
+	}
+
+
+	/**
+	 * @see Service#getUri()
+	 */
+	public URI getUri() {
+		return null;
 	}
 
 }
