@@ -1,8 +1,8 @@
 package at.erceg_kritzl.pi_calculator.control;
 
-import components.Client;
-import components.Balancer;
-import components.Calculator;
+import at.erceg_kritzl.pi_calculator.components.Client;
+import at.erceg_kritzl.pi_calculator.components.Balancer;
+import at.erceg_kritzl.pi_calculator.components.Calculator;
 
 public class Main {
 
@@ -12,9 +12,7 @@ public class Main {
 
 	private Calculator calculator;
 
-	private Calculator calculator;
-
-	private CLI cLI;
+	private CLI cli;
 
 	private Input input;
 
