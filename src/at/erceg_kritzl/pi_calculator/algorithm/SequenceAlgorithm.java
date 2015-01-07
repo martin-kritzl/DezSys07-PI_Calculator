@@ -1,6 +1,6 @@
-package algorithm;
+package at.erceg_kritzl.pi_calculator.algorithm;
 
-import service.Service;
+import at.erceg_kritzl.pi_calculator.service.Service;
 
 public class SequenceAlgorithm implements BalancerAlgorithm {
 
