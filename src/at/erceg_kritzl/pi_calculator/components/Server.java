@@ -2,6 +2,7 @@ package at.erceg_kritzl.pi_calculator.components;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -44,7 +45,7 @@ public class Server implements Calculator, Serializable {
 	 * 
 	 *  
 	 */
-	public BigDecimal pi(int anzNachkommastellen) {
+	public BigDecimal pi(int anzNachkommastellen) throws RemoteException, NotBoundException {
 		return alg.pi(anzNachkommastellen);
 	}
 

@@ -4,6 +4,8 @@ import at.erceg_kritzl.pi_calculator.service.Service;
 import at.erceg_kritzl.pi_calculator.algorithm.BalancerAlgorithm;
 
 import java.math.BigDecimal;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 public class Balancer implements Calculator {
 
@@ -14,11 +16,11 @@ public class Balancer implements Calculator {
 	private BalancerAlgorithm balancerAlgorithm;
 
 	public Balancer(Service service) {
-
+		this.service = service;
 	}
 
 	public Service getService() {
-		return null;
+		return this.service;
 	}
 
 
@@ -27,8 +29,8 @@ public class Balancer implements Calculator {
 	 * 
 	 *  
 	 */
-	public BigDecimal pi(int anzNachkommastellen) {
-		return null;
+	public BigDecimal pi(int anzNachkommastellen) throws RemoteException, NotBoundException {
+		return this.service.getServer(this.alg.getServerName()).pi(anzNachkommastellen);
 	}
 
 }
