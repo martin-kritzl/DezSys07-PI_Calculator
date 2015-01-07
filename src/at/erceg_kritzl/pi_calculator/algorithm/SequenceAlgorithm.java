@@ -12,7 +12,7 @@ public class SequenceAlgorithm implements BalancerAlgorithm {
 
 
 	/**
-	 * @see algorithm.BalancerAlgorithm#getServerName()
+	 * @see at.erceg_kritzl.pi_calculator.algorithm.BalancerAlgorithm#getServerName()
 	 * 
 	 *  
 	 */

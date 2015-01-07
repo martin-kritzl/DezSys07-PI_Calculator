@@ -1,29 +1,41 @@
 package at.erceg_kritzl.pi_calculator.components;
 
-import at.erceg_kritzl.pi_calculator.algorithm.CalculatorAlgorithm;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.net.URI;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
+import at.erceg_kritzl.pi_calculator.service.Service;
+
+@SuppressWarnings("serial")
 public class Server implements Calculator, Serializable {
 
 	private Calculator alg;
 
 	private String name;
 
-	private CalculatorAlgorithm calculatorAlgorithm;
+	public Server(Service service, Calculator alg, String name, int port) throws RemoteException {
 
-	public Server(URI balancerUri, Calculator alg, String name) {
-
+		this.name = name;
+		
+		/* Damit Verbindungen zugelassen werden, wird am Anfang eine Policy angegeben. */
+		
+		if (System.getSecurityManager() == null) {
+            System.setProperty("java.security.policy",System.class.getResource("/java.policy").toString());
+        	System.setSecurityManager(new SecurityManager());
+        }
+		
+		this.alg = (Calculator) UnicastRemoteObject.exportObject(this, port);
+		
+		
 	}
 
 	public String getName() {
-		return null;
+		return this.name;
 	}
 
 	public Calculator getAlorithm() {
-		return null;
+		return this.alg;
 	}
 
 
@@ -33,7 +45,7 @@ public class Server implements Calculator, Serializable {
 	 *  
 	 */
 	public BigDecimal pi(int anzNachkommastellen) {
-		return null;
+		return alg.pi(anzNachkommastellen);
 	}
 
 }
