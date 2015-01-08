@@ -2,6 +2,7 @@ package at.erceg_kritzl.pi_calculator.components;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
@@ -20,7 +21,8 @@ public class Server implements Calculator, Runnable, Serializable {
 
 	private ServiceManager sm;
 	
-	public Server(URI balancerUri, Calculator alg, String name, int port) throws RemoteException {
+	public Server(URI balancerUri, String balancerName, Calculator alg, String name, int port) 
+			throws RemoteException, AlreadyBoundException, MalformedURLException, NotBoundException {
 
 		this.name = name;
 		this.alg = alg;
@@ -39,8 +41,8 @@ public class Server implements Calculator, Runnable, Serializable {
 		
 		Calculator serverReference = (Calculator) UnicastRemoteObject.exportObject(this, port);
 
-		sm = (ServiceManager) Naming.lookup(balancerUri.toString());
-		this.sm.getService.addServer(this.name, serverReference);
+		sm = (ServiceManager) Naming.lookup(balancerUri.toString() + "/" + balancerName);
+		this.sm.getService().addServer(this.name, serverReference);
 		
 	}
 
@@ -65,7 +67,7 @@ public class Server implements Calculator, Runnable, Serializable {
 	@Override
 	public void run() {
 		try {
-			this.sm.getService.removeServer(this.name);
+			this.sm.getService().removeServer(this.name);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {

@@ -13,7 +13,7 @@ public class Client implements Runnable {
 	
 	private Calculator calc;
 	
-	public Client(URI balancerUri, int anzNachkommastellen)
+	public Client(URI balancerUri, String balancerName, int anzNachkommastellen)
 			throws MalformedURLException, RemoteException, NotBoundException {
 
 		/* Damit Verbindungen zugelassen werden, wird am Anfang eine Policy angegeben. */
@@ -30,7 +30,7 @@ public class Client implements Runnable {
         
         //String balancerUri = "rmi://" + balancerIP + ":" + balancerPort + "/Balancer";
         
-        this.calc = (Calculator) Naming.lookup(balancerUri.toString());
+        this.calc = (Calculator) Naming.lookup(balancerUri.toString() + "/" + balancerName);
 		this.nachkommastellen = anzNachkommastellen;
         
 	}
