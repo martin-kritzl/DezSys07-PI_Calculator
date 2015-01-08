@@ -2,6 +2,9 @@ package at.erceg_kritzl.pi_calculator.components;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.net.URI;
+import java.rmi.AlreadyBoundException;
+import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -10,17 +13,17 @@ import at.erceg_kritzl.pi_calculator.service.Service;
 
 @SuppressWarnings("serial")
 public class Server implements Calculator, Runnable, Serializable {
-
-	private Service service;
 	
 	private Calculator alg;
 
 	private String name;
 
-	public Server(Service service, Calculator alg, String name, int port) throws RemoteException {
+	private ServiceManager sm;
+	
+	public Server(URI balancerUri, Calculator alg, String name, int port) throws RemoteException {
 
-		this.service = service;
 		this.name = name;
+		this.alg = alg;
 		
 		/* Damit Verbindungen zugelassen werden, wird am Anfang eine Policy angegeben. */
 		
@@ -34,8 +37,10 @@ public class Server implements Calculator, Runnable, Serializable {
             System.setSecurityManager(new SecurityManager());
         }
 		
-		this.alg = (Calculator) UnicastRemoteObject.exportObject(this, port);
-		
+		Calculator serverReference = (Calculator) UnicastRemoteObject.exportObject(this, port);
+
+		sm = (ServiceManager) Naming.lookup(balancerUri.toString());
+		this.sm.getService.addServer(this.name, serverReference);
 		
 	}
 
@@ -60,7 +65,7 @@ public class Server implements Calculator, Runnable, Serializable {
 	@Override
 	public void run() {
 		try {
-			this.service.removeServer(this.name);
+			this.sm.getService.removeServer(this.name);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
