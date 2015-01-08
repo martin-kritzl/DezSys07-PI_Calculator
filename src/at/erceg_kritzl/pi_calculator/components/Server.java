@@ -9,14 +9,17 @@ import java.rmi.server.UnicastRemoteObject;
 import at.erceg_kritzl.pi_calculator.service.Service;
 
 @SuppressWarnings("serial")
-public class Server implements Calculator, Serializable {
+public class Server implements Calculator, Runnable, Serializable {
 
+	private Service service;
+	
 	private Calculator alg;
 
 	private String name;
 
 	public Server(Service service, Calculator alg, String name, int port) throws RemoteException {
 
+		this.service = service;
 		this.name = name;
 		
 		/* Damit Verbindungen zugelassen werden, wird am Anfang eine Policy angegeben. */
@@ -47,6 +50,11 @@ public class Server implements Calculator, Serializable {
 	 */
 	public BigDecimal pi(int anzNachkommastellen) throws RemoteException, NotBoundException {
 		return alg.pi(anzNachkommastellen);
+	}
+
+	@Override
+	public void run() {
+		
 	}
 
 }

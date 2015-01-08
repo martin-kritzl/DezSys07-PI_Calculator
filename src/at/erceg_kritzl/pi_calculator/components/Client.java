@@ -7,11 +7,13 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
-public class Client {
+public class Client implements Runnable {
 
+	private int nachkommastellen;
+	
 	private Calculator calc;
 	
-	public Client(URI balancerUri)
+	public Client(URI balancerUri, int anzNachkommastellen)
 			throws MalformedURLException, RemoteException, NotBoundException {
 
 		/* Damit Verbindungen zugelassen werden, wird am Anfang eine Policy angegeben. */
@@ -24,11 +26,23 @@ public class Client {
         //String balancerUri = "rmi://" + balancerIP + ":" + balancerPort + "/Balancer";
         
         this.calc = (Calculator) Naming.lookup(balancerUri.toString());
-		
+		this.nachkommastellen = anzNachkommastellen;
+        
 	}
 
 	public BigDecimal getPi(int anzNachkommastellen) throws RemoteException, NotBoundException {
 		return calc.pi(anzNachkommastellen);
+	}
+
+	@Override
+	public void run() {
+		try {
+			getPi(this.nachkommastellen);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
