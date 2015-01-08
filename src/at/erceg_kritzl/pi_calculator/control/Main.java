@@ -11,6 +11,7 @@ import at.erceg_kritzl.pi_calculator.service.Service;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -22,6 +23,7 @@ import java.util.concurrent.Executors;
 public class Main {
 
 	private static String balancerName = "Balancer";
+	private static int serverPort = 45456;
 
 	public static void main(String[] args) {
 		Input cli = new CLI();
@@ -33,11 +35,11 @@ public class Main {
 		try {
 			if (cli.isNewBalancer()) {
 				Service service = new CalcService();
-				new Balancer(service, cli.getBalancerUri().getPort());
+				new Balancer(service, balancerName, cli.getBalancerUri().getPort());
 			}
 
 			for (String server : cli.getServers()) {
-				Thread t = new Thread(new Server(cli.getBalancerUri(), balancerName, algorithm, server, 45456));
+				Thread t = new Thread(new Server(cli.getBalancerUri(), balancerName, algorithm, server, serverPort++));
 				Runtime.getRuntime().addShutdownHook(t);
 			}
 
@@ -49,6 +51,8 @@ public class Main {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
+			e.printStackTrace();
+		} catch (AlreadyBoundException e) {
 			e.printStackTrace();
 		}
 	}

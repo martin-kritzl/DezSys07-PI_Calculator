@@ -2,15 +2,17 @@ package at.erceg_kritzl.pi_calculator.service;
 
 import at.erceg_kritzl.pi_calculator.components.Calculator;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.Registry;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class CalcService implements Service {
+public class CalcService implements Service, Serializable {
 
 	private Map<String, Calculator> servers;
 
@@ -22,7 +24,7 @@ public class CalcService implements Service {
 	/**
 	 * @see at.erceg_kritzl.pi_calculator.service.Service#addServer(java.lang.String, at.erceg_kritzl.pi_calculator.components.Calculator)
 	 */
-	public void addServer(String name, Calculator calc) {
+	public synchronized void addServer(String name, Calculator calc) {
 		this.servers.put(name, calc);
 	}
 

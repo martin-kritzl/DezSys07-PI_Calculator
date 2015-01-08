@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import at.erceg_kritzl.pi_calculator.service.Service;
+import com.sun.org.apache.xerces.internal.impl.xs.util.XSNamedMap4Types;
 
 @SuppressWarnings("serial")
 public class Server implements Calculator, Runnable, Serializable {
@@ -43,7 +44,9 @@ public class Server implements Calculator, Runnable, Serializable {
 
 		sm = (ServiceManager) Naming.lookup(balancerUri.toString() + "/" + balancerName);
 		this.sm.getService().addServer(this.name, serverReference);
-		
+//		System.out.println(this.sm.getService().getServer("server1").toString());
+//		ServiceManager sm2 = (ServiceManager) Naming.lookup(balancerUri.toString() + "/" + balancerName);
+//		System.out.println(sm2.getService().getServer("server1").toString());
 	}
 
 	public String getName() {
