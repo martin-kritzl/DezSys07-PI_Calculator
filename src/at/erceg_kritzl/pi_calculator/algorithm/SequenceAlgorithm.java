@@ -9,13 +9,13 @@ import java.util.Set;
 public class SequenceAlgorithm implements BalancerAlgorithm {
 
 	private Service service;
-	private Set<String> freeServers, allServers;
+	private Set<String> availableServers, allServers;
 
 	public SequenceAlgorithm(Service service) {
 
 		this.service = service;
-		this.freeServers = new HashSet<String>(service.getServerNames());
 		this.allServers = new HashSet<String>(service.getServerNames());
+		this.availableServers = new HashSet<String>(service.getServerNames());
 
 	}
 
@@ -26,21 +26,10 @@ public class SequenceAlgorithm implements BalancerAlgorithm {
 	 */
 	public String getServerName() {
 
-//		List<String> availableServers = new ArrayList<String>();
-//
-//		if (this.service.getServerNames().size() > 0) {
-//			for (int i = 0; i < this.service.getServerNames().size(); i++) {
-//				availableServers.addAll(this.service.getServerNames());
-//				availableServers.remove();
-//			}
-//		} else {
-//			System.out.println("Kein Server momentan vorhanden");
-//		}
-//
 		for (String name : this.service.getServerNames()) {
 			if (!this.allServers.contains(name)) {
 				this.allServers.add(name);
-				this.freeServers.add(name);
+				this.availableServers.add(name);
 			}
 		}
 
@@ -53,14 +42,14 @@ public class SequenceAlgorithm implements BalancerAlgorithm {
 		}
 
 		this.allServers.removeAll(del);
-		this.freeServers.removeAll(del);
+		this.availableServers.removeAll(del);
 
 
-		return new ArrayList<String>(this.freeServers).get(0);
+		return new ArrayList<String>(this.availableServers).get(0);
 	}
 
 	public void releaseServer(String name) {
-		this.freeServers.add(name);
+		this.availableServers.add(name);
 	}
 
 }
