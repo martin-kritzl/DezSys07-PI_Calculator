@@ -6,8 +6,10 @@ import at.erceg_kritzl.pi_calculator.algorithm.BalancerAlgorithm;
 import java.math.BigDecimal;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
-public class Balancer implements Calculator {
+public class Balancer implements Calculator, ServiceManager {
 
 	private BalancerAlgorithm alg;
 
@@ -15,8 +17,9 @@ public class Balancer implements Calculator {
 
 	private BalancerAlgorithm balancerAlgorithm;
 
-	public Balancer(Service service) {
+	public Balancer(Service service, int port) throws RemoteException {
 		this.service = service;
+		Registry registry = LocateRegistry.createRegistry(port);
 	}
 
 	public Service getService() {

@@ -45,7 +45,8 @@ public interface Service {
 	 * Gibt die URI des Balancers und damit auch der Registry zurueck.
 	 *
 	 * @return URI des Balancers
-	 */
+
 	public abstract URI getUri();
+	*/
 
 }

@@ -27,7 +27,8 @@ public class SequenceAlgorithm implements BalancerAlgorithm {
 		} else {
 			System.out.println("Kein Server momentan vorhanden");
 		}
-	
+
+		return null;
 	}
 
 }

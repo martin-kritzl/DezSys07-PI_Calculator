@@ -3,6 +3,7 @@ package at.erceg_kritzl.pi_calculator.control;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
+import org.kohsuke.args4j.spi.Messages;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -21,12 +22,13 @@ public class CLI implements Input {
 	private String servers;
 
 	@Option(name = "-b", usage = "specify the location of the balancer [rmi://127.0.0.1:77777]")
-	private String balancerUri = "rmi://127.0.0.1:77777";
+	private String balancerUriString = "rmi://127.0.0.1:77777";
 
 	@Option(name = "-n", usage = "specify if a new balancer should been build")
 	private String newBalancerString = "false";
 
 	private boolean newBalancer = false;
+	private URI balancerUri;
 
 
 	/**
@@ -44,18 +46,24 @@ public class CLI implements Input {
 			if (this.newBalancerString.equals("true"))
 				this.newBalancer = true;
 			else if (!this.newBalancerString.equals("false"))
-				throw new CmdLineException("");
+				throw new CmdLineException(parser, Messages.DEFAULT_META_EXPLICIT_BOOLEAN_OPTION_HANDLER, this.newBalancerString);
+
+			this.balancerUri = new URI(this.balancerUriString);
 
 		} catch (CmdLineException e) {
 			// if something went wrong the help is printed
 
-			System.err.println(e.getMessage());
-			System.err.println("java -jar CalcPi [options...] arguments...");
-			parser.printUsage(System.err);
-			System.err.println();
-
-			System.exit(1);
+			this.inputError(e, parser);
+		} catch (URISyntaxException e) {
+			this.inputError(e, parser);
 		}
+	}
+
+	private void inputError(Exception e, CmdLineParser parser) {
+		System.err.println("java -jar CalcPi [options...] arguments...");
+		parser.printUsage(System.err);
+		System.err.println();
+		System.exit(1);
 	}
 
 	@Override
@@ -74,8 +82,8 @@ public class CLI implements Input {
 	 * @return URI
 	 */
 	@Override
-	public URI getBalancerUri() throws URISyntaxException {
-		return new URI(this.balancerUri);
+	public URI getBalancerUri() {
+		return this.balancerUri;
 	}
 
 	/**

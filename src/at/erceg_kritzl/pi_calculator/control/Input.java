@@ -22,7 +22,7 @@ public interface Input {
 	 *
 	 * @return URI
 	 */
-	public URI getBalancerUri() throws URISyntaxException;
+	public URI getBalancerUri();
 
 	/**
 	 * Erstellt aus dem eingegebenen String des Benutzers, eine Liste der Servernamen
