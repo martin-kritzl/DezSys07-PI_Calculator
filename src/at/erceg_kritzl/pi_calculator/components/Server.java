@@ -25,8 +25,13 @@ public class Server implements Calculator, Runnable, Serializable {
 		/* Damit Verbindungen zugelassen werden, wird am Anfang eine Policy angegeben. */
 		
 		if (System.getSecurityManager() == null) {
-            System.setProperty("java.security.policy",System.class.getResource("/java.policy").toString());
-        	System.setSecurityManager(new SecurityManager());
+            
+			try {
+				System.setProperty("java.security.policy",System.class.getResource("/java.policy").toString());
+			}catch(Exception e){
+				System.err.println("policy file: java.policy was not found or could not be set as property");
+			}
+            System.setSecurityManager(new SecurityManager());
         }
 		
 		this.alg = (Calculator) UnicastRemoteObject.exportObject(this, port);
@@ -54,7 +59,13 @@ public class Server implements Calculator, Runnable, Serializable {
 
 	@Override
 	public void run() {
-		
+		try {
+			this.service.removeServer(this.name);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

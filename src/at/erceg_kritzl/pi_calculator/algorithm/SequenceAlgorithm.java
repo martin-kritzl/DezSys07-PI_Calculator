@@ -7,7 +7,9 @@ public class SequenceAlgorithm implements BalancerAlgorithm {
 	private Service service;
 
 	public SequenceAlgorithm(Service service) {
-
+		
+		this.service = service;
+	
 	}
 
 
@@ -17,7 +19,15 @@ public class SequenceAlgorithm implements BalancerAlgorithm {
 	 *  
 	 */
 	public String getServerName() {
-		return null;
+		
+		if (this.service.getServerNames().size() > 0) {
+			for(int i = 0; i < this.service.getServerNames().size(); i++) {
+				return this.service.getServerNames().get(i);
+			} 
+		} else {
+			System.out.println("Kein Server momentan vorhanden");
+		}
+	
 	}
 
 }

@@ -19,8 +19,13 @@ public class Client implements Runnable {
 		/* Damit Verbindungen zugelassen werden, wird am Anfang eine Policy angegeben. */
 		
         if (System.getSecurityManager() == null) {
-            System.setProperty("java.security.policy", System.class.getResource("/java.policy").toString());
-            System.setSecurityManager(new SecurityManager());
+			
+        	try {
+				System.setProperty("java.security.policy",System.class.getResource("/java.policy").toString());
+			}catch(Exception e){
+				System.err.println("policy file: java.policy was not found or could not be set as property");
+			}
+        	System.setSecurityManager(new SecurityManager());
         }
         
         //String balancerUri = "rmi://" + balancerIP + ":" + balancerPort + "/Balancer";
