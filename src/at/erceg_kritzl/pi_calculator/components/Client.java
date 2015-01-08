@@ -42,12 +42,19 @@ public class Client implements Runnable {
 	@Override
 	public void run() {
 		try {
-			getPi(this.nachkommastellen);
+			while(true) {
+				BigDecimal pi = getPi(this.nachkommastellen);
+				if (pi!=null) {
+					System.out.println(pi);
+					break;
+				}
+			}
+
+
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
 			e.printStackTrace();
 		}
 	}
-
 }

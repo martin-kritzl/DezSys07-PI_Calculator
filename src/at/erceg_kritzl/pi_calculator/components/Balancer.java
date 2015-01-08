@@ -1,5 +1,6 @@
 package at.erceg_kritzl.pi_calculator.components;
 
+import at.erceg_kritzl.pi_calculator.algorithm.SequenceAlgorithm;
 import at.erceg_kritzl.pi_calculator.service.CalcService;
 import at.erceg_kritzl.pi_calculator.service.Service;
 import at.erceg_kritzl.pi_calculator.algorithm.BalancerAlgorithm;
@@ -12,8 +13,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
-public class Balancer implements Calculator, ServiceManager {
+public class Balancer extends UnicastRemoteObject implements ServiceManager{
 
 	private BalancerAlgorithm alg;
 
@@ -27,19 +29,15 @@ public class Balancer implements Calculator, ServiceManager {
 
 	public Balancer(String name, int port) throws RemoteException, AlreadyBoundException {
 		this.name = name;
+		this.service = new CalcService();
+		this.alg = new SequenceAlgorithm(this.service);
 		this.registry = LocateRegistry.createRegistry(port);
 		this.registry.bind(this.name, this);
-		this.service = new CalcService();
 	}
 
-	public Service getService() {
+	public Service getService() throws RemoteException {
 		return this.service;
 	}
-
-	public void bind() throws RemoteException {
-		this.registry.rebind(this.name, this);
-	}
-
 
 	/**
 	 * @see at.erceg_kritzl.pi_calculator.components.Calculator#pi(int)
@@ -48,11 +46,14 @@ public class Balancer implements Calculator, ServiceManager {
 	 */
 	public BigDecimal pi(int anzNachkommastellen) throws RemoteException, NotBoundException {
 		String availableServer = this.alg.getServerName();
-		//String freeServer = "server1";
-		//System.out.println(this.service.getServer(freeServer).toString());
-		BigDecimal erg = this.service.getServer(availableServer).pi(anzNachkommastellen);
-		this.alg.releaseServer(availableServer);
-		return erg;
+		if (availableServer!=null) {
+			BigDecimal erg = this.service.getServer(availableServer).pi(anzNachkommastellen);
+			this.alg.releaseServer(availableServer);
+			System.out.println(availableServer+" hat pi fuer " + anzNachkommastellen+ " Stellen berechnet.");
+			return erg;
+		} else
+			return null;
+
 	}
 
 }

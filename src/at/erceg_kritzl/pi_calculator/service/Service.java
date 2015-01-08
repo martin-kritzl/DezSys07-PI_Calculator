@@ -4,10 +4,11 @@ import at.erceg_kritzl.pi_calculator.components.Calculator;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Set;
 
-public interface Service {
+public interface Service extends Remote{
 
 	/**
 	 * Fuegt einen neuen Server in die Registry ein
@@ -37,7 +38,7 @@ public interface Service {
 	 *
 	 * @return Liste der Namen der Server
 	 */
-	public Set<String> getServerNames();
+	public Set<String> getServerNames() throws RemoteException;
 
 	/**
 	 * Gibt die URI des Balancers und damit auch der Registry zurueck.

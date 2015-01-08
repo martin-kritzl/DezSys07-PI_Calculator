@@ -35,7 +35,7 @@ public class Main {
 		try {
 			if (cli.isNewBalancer()) {
 				Service service = new CalcService();
-				new Balancer(service, balancerName, cli.getBalancerUri().getPort());
+				new Balancer(balancerName, cli.getBalancerUri().getPort());
 			}
 
 			for (String server : cli.getServers()) {

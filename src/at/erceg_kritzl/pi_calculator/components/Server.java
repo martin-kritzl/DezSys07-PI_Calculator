@@ -8,6 +8,8 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import at.erceg_kritzl.pi_calculator.service.Service;
@@ -43,10 +45,13 @@ public class Server implements Calculator, Runnable, Serializable {
 		Calculator serverReference = (Calculator) UnicastRemoteObject.exportObject(this, port);
 
 		sm = (ServiceManager) Naming.lookup(balancerUri.toString() + "/" + balancerName);
-		this.sm.getService().addServer(this.name, serverReference);
+		sm.getService().addServer(this.name, serverReference);
 //		System.out.println(this.sm.getService().getServer("server1").toString());
 //		ServiceManager sm2 = (ServiceManager) Naming.lookup(balancerUri.toString() + "/" + balancerName);
 //		System.out.println(sm2.getService().getServer("server1").toString());
+
+//		Registry registry = LocateRegistry.getRegistry(balancerUri.getHost(), balancerUri.getPort());
+//		registry.rebind(balancerName, (Calculator) UnicastRemoteObject.exportObject(this.sm, balancerUri.getPort()));
 	}
 
 	public String getName() {
@@ -59,7 +64,7 @@ public class Server implements Calculator, Runnable, Serializable {
 
 
 	/**
-	 * @see components.Calculator#pi(int)
+	 * @see at.erceg_kritzl.pi_calculator.components.Calculator#pi(int)
 	 * 
 	 *  
 	 */
