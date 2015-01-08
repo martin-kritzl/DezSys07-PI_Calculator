@@ -47,10 +47,12 @@ public class Balancer implements Calculator, ServiceManager {
 	 *  
 	 */
 	public BigDecimal pi(int anzNachkommastellen) throws RemoteException, NotBoundException {
-		//String freeServer = this.alg.getServerName();
-		String freeServer = "server1";
-		System.out.println(this.service.getServer(freeServer).toString());
-		return this.service.getServer(freeServer).pi(anzNachkommastellen);
+		String availableServer = this.alg.getServerName();
+		//String freeServer = "server1";
+		//System.out.println(this.service.getServer(freeServer).toString());
+		BigDecimal erg = this.service.getServer(availableServer).pi(anzNachkommastellen);
+		this.alg.releaseServer(availableServer);
+		return erg;
 	}
 
 }

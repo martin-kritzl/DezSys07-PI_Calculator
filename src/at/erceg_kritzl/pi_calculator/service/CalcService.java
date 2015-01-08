@@ -10,6 +10,7 @@ import java.rmi.registry.Registry;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CalcService implements Service, Serializable {
@@ -50,7 +51,7 @@ public class CalcService implements Service, Serializable {
 	 * 
 	 *  
 	 */
-	public List<String> getServerNames() {
-		return new LinkedList<String>(this.servers.keySet());
+	public Set<String> getServerNames() {
+		return this.servers.keySet();
 	}
 }

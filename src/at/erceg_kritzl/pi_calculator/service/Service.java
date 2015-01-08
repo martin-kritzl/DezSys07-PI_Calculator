@@ -1,13 +1,11 @@
 package at.erceg_kritzl.pi_calculator.service;
 
-import at.erceg_kritzl.pi_calculator.components.Balancer;
 import at.erceg_kritzl.pi_calculator.components.Calculator;
 
-import java.net.URI;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.List;
+import java.util.Set;
 
 public interface Service {
 
@@ -39,7 +37,7 @@ public interface Service {
 	 *
 	 * @return Liste der Namen der Server
 	 */
-	public List<String> getServerNames();
+	public Set<String> getServerNames();
 
 	/**
 	 * Gibt die URI des Balancers und damit auch der Registry zurueck.
