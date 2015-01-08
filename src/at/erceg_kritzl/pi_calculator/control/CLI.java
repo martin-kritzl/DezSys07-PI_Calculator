@@ -4,12 +4,10 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-import javax.swing.text.StyledEditorKit;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class CLI implements Input {
 
@@ -22,11 +20,13 @@ public class CLI implements Input {
 	@Option(name = "-s", usage = "specify the names of the server(s) [server1,server2,...]")
 	private String servers;
 
-	@Option(name = "-b", usage = "specify the location of the balancer [127.0.0.1:65778]", required = true)
-	private URI balancerUri = null;
+	@Option(name = "-b", usage = "specify the location of the balancer [rmi://127.0.0.1:77777]")
+	private String balancerUri = "rmi://127.0.0.1:77777";
 
 	@Option(name = "-n", usage = "specify if a new balancer should been build")
-	private Boolean newBalancer = false;
+	private String newBalancerString = "false";
+
+	private boolean newBalancer = false;
 
 
 	/**
@@ -40,6 +40,11 @@ public class CLI implements Input {
 		try {
 			// pars the args
 			parser.parseArgument(args);
+
+			if (this.newBalancerString.equals("true"))
+				this.newBalancer = true;
+			else if (!this.newBalancerString.equals("false"))
+				throw new CmdLineException("");
 
 		} catch (CmdLineException e) {
 			// if something went wrong the help is printed
@@ -69,8 +74,8 @@ public class CLI implements Input {
 	 * @return URI
 	 */
 	@Override
-	public URI getBalancerUri() {
-		return this.balancerUri;
+	public URI getBalancerUri() throws URISyntaxException {
+		return new URI(this.balancerUri);
 	}
 
 	/**
@@ -80,7 +85,10 @@ public class CLI implements Input {
 	 */
 	@Override
 	public List<String> getServers() {
-		return Arrays.asList(this.servers.split(","));
+		if (this.servers!=null)
+			return Arrays.asList(this.servers.split(","));
+		else
+			return null;
 	}
 
 	/**
@@ -90,6 +98,6 @@ public class CLI implements Input {
 	 */
 	@Override
 	public boolean isNewBalancer() {
-		return this.isNewBalancer();
+		return this.newBalancer;
 	}
 }

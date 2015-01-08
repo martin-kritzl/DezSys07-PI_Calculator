@@ -22,20 +22,19 @@ public class Main {
 
 	public static void main(String[] args) {
 		Input cli = new CLI();
-		//cli.parseArgs(args);
-		//System.out.println(cli.getBalancerUri());
-		//System.out.println(cli.getCountClients());
-		//System.out.println(cli.getDigits());
-		//System.out.println(cli.getServers().get(0));
-		//System.out.println(cli.getServers().get(1));
-		//System.out.println(cli.isNewBalancer());
-		URI uri = null;
+		cli.parseArgs(args);
 		try {
-			uri = new URI("rmi://127.0.0.1:54564");
+			System.out.println(cli.getBalancerUri());
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		System.out.println(uri.toString());
+		System.out.println(cli.getCountClients());
+		System.out.println(cli.getDigits());
+		if (cli.getServers() != null) {
+			System.out.println(cli.getServers().get(0));
+			System.out.println(cli.getServers().get(1));
+		}
+		System.out.println(cli.isNewBalancer());
 	}
 
 }

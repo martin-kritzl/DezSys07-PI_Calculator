@@ -1,6 +1,7 @@
 package at.erceg_kritzl.pi_calculator.control;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public interface Input {
 	 *
 	 * @return URI
 	 */
-	public URI getBalancerUri();
+	public URI getBalancerUri() throws URISyntaxException;
 
 	/**
 	 * Erstellt aus dem eingegebenen String des Benutzers, eine Liste der Servernamen
