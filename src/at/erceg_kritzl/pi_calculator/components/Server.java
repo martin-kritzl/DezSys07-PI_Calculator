@@ -8,12 +8,7 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-
-import at.erceg_kritzl.pi_calculator.service.Service;
-import com.sun.org.apache.xerces.internal.impl.xs.util.XSNamedMap4Types;
 
 @SuppressWarnings("serial")
 public class Server implements Calculator, Runnable, Serializable {
@@ -44,7 +39,9 @@ public class Server implements Calculator, Runnable, Serializable {
 		
 		Calculator serverReference = (Calculator) UnicastRemoteObject.exportObject(this, port);
 
+		System.out.println(name+ " will sich bei Balancer "+balancerName+ " unter " + balancerUri.toString()+" anmelden.");
 		sm = (ServiceManager) Naming.lookup(balancerUri.toString() + "/" + balancerName);
+		System.out.println(name+ " hat sich bei Balancer "+balancerName+ " unter " + balancerUri.toString()+".");
 		sm.getService().addServer(this.name, serverReference);
 //		System.out.println(this.sm.getService().getServer("server1").toString());
 //		ServiceManager sm2 = (ServiceManager) Naming.lookup(balancerUri.toString() + "/" + balancerName);

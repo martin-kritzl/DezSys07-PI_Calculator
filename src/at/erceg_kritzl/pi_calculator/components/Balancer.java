@@ -1,11 +1,10 @@
 package at.erceg_kritzl.pi_calculator.components;
 
+import at.erceg_kritzl.pi_calculator.algorithm.BalancerAlgorithm;
 import at.erceg_kritzl.pi_calculator.algorithm.SequenceAlgorithm;
 import at.erceg_kritzl.pi_calculator.service.CalcService;
 import at.erceg_kritzl.pi_calculator.service.Service;
-import at.erceg_kritzl.pi_calculator.algorithm.BalancerAlgorithm;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -33,6 +32,7 @@ public class Balancer extends UnicastRemoteObject implements ServiceManager{
 		this.alg = new SequenceAlgorithm(this.service);
 		this.registry = LocateRegistry.createRegistry(port);
 		this.registry.bind(this.name, this);
+		System.out.println(name + " hat sich unter " + registry.toString() + " angemeldet.");
 	}
 
 	public Service getService() throws RemoteException {

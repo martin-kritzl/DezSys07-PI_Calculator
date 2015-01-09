@@ -1,9 +1,7 @@
 package at.erceg_kritzl.pi_calculator.control;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 
 public interface Input {
 

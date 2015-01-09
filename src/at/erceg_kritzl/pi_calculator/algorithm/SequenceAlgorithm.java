@@ -5,7 +5,6 @@ import at.erceg_kritzl.pi_calculator.service.Service;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class SequenceAlgorithm implements BalancerAlgorithm {
