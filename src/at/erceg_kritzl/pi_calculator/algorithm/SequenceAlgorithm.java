@@ -27,7 +27,9 @@ public class SequenceAlgorithm implements BalancerAlgorithm {
 	 */
 	public String getServerName() throws RemoteException {
 
-		System.out.println(this.availableServers);
+		System.out.println("Available: " + this.availableServers);
+		System.out.println("All in Service: " + this.allServers);
+		System.out.println("All in Balancer: " + this.service.getServerNames());
 
 		this.synchronize();
 

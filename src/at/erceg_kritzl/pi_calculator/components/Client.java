@@ -29,7 +29,7 @@ public class Client implements Runnable {
         }
         
         //String balancerUri = "rmi://" + balancerIP + ":" + balancerPort + "/Balancer";
-        
+        System.out.println("Looking for: " + balancerUri.toString() + "/" + balancerName);
         this.calc = (Calculator) Naming.lookup(balancerUri.toString() + "/" + balancerName);
 		this.nachkommastellen = anzNachkommastellen;
         
