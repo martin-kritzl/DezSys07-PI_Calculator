@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Name des Projekts, den standardmaessigen target und den Startordner-->
-<project name="Hello" default="main" basedir=".">
+<project name="Erceg_Kritzl_DezSys07" default="main" basedir=".">
 
     <!--Definition der Variablen zur erleichterten Aenderung-->
 
@@ -10,7 +10,7 @@
     <property name="scp.hostname" value="10.0.0.25"/>
 
 
-    <property name="build.dir" value="./build2" />
+    <property name="build.dir" value="./build" />
     <!--${propertyname} ist zur Verwendung der Variablen-->
     <property name="reports.dir" value="${build.dir}/testreports/" />
     <property name="doc.dir" value="${build.dir}/javadoc/" />
@@ -21,6 +21,9 @@
     <property name="lib.dir" value="./lib/"/>
     <property name="main.class" value="at.erceg_kritzl.pi_calculator.control.Main"/>
     <property name="source.dir" value="./src/"/>
+    <property name="ressource.dir" value="./resources"/>
+    <property name="files.dir" value="./files"/>
+
 
     <!--Includieren der notwendigen Libraries fuer scp-->
     <path id="scp.class.path">
@@ -47,19 +50,14 @@
     <path id="classpath.base">
     </path>
 
-    <!--&lt;!&ndash;Definieren des Classloaders&ndash;&gt;-->
-    <!--<taskdef resource="net/jtools/classloadertask/antlib.xml">-->
-        <!--<classpath>-->
-            <!--<fileset dir="${lib.dir}" includes="ant-classloader*.jar"/>-->
-        <!--</classpath>-->
-    <!--</taskdef>-->
+    <!--Definieren des Classloaders-->
+    <taskdef resource="net/jtools/classloadertask/antlib.xml">
+        <classpath>
+            <fileset dir="${lib.dir}" includes="ant-classloader*.jar"/>
+        </classpath>
+    </taskdef>
 
-    <!--&lt;!&ndash;Ueber den Classloader wird das jsch-0.1.51.jar integriert&ndash;&gt;-->
-    <!--<classloader loader="system">-->
-        <!--<classpath>-->
-            <!--<fileset dir="${lib.dir}" includes="jsch*.jar"/>-->
-        <!--</classpath>-->
-    <!--</classloader>-->
+
 
     <!--Startpunkt der Datei-->
     <!--Depends sind die targets die zuvor ausgefuehrt werden muessen-->
@@ -80,13 +78,12 @@
     </target>
 
     <!--Erstellt das jarFile und setzt die Main-Klasse-->
-    <target name="jar" depends= "compile, junitreport, doc" >
-        <mkdir dir="${build.dir}/${lib.dir}"/>
-        <copy file="${lib.dir}/log4j-1.2.17.jar" todir="${build.dir}/${lib.dir}"/>
+    <target name="jar" depends= "compile, junitreport, doc, exportFiles" >
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${jar.file}" basedir="${build.dir}"  excludes="jar">
             <manifest>
                 <attribute name="Main-Class" value="${main.class}"/>
+                <attribute name="Class-Path" value=". ${ressource.dir}/ ${lib.dir}log4j-1.2.17.jar ${lib.dir}args4j-2.0.29.jar"/>
             </manifest>
         </jar>
     </target>
@@ -94,7 +91,8 @@
     <!--Fuehrt das jar-File aus-->
     <target name="run" depends="jar" >
         <java jar="${jar.dir}/${ant.project.name}.jar"
-              fork="true"/>
+              fork="true">
+        </java>
     </target>
 
     <!--Erstellt xml-Files aus den Testfaellen die nachher in html exportiert werden-->
@@ -121,11 +119,34 @@
         </junitreport>
     </target>
 
+    <!--Exportiert alle notwendigen Files und Libraries-->
+    <target name="exportFiles">
+        <mkdir dir="${build.dir}/${lib.dir}"/>
+        <!--Hiermit koennen mehrere Files gleichzeitig kopiert werden-->
+        <copy todir="${build.dir}/${lib.dir}">
+            <fileset dir="${lib.dir}"
+                     includes="log4j-1.2.17.jar,args4j-2.0.29.jar" />
+        </copy>
+        <copy todir="${classes.dir}">
+        <fileset dir="${source.dir}"
+                 includes="**/*.properties" />
+        </copy>
+        <mkdir dir="${build.dir}/${ressource.dir}"/>
+        <copy todir="${build.dir}/${ressource.dir}">
+            <fileset dir="${ressource.dir}"
+                     includes="*" />
+        </copy>
+        <copy todir="${build.dir}/${files.dir}">
+            <fileset dir="${files.dir}"
+                     includes="*" />
+        </copy>
+    </target>
+
     <!--Erstellt javadoc der source-Datein-->
     <target name="doc" depends="compile">
         <javadoc
                 sourcepath="${source.dir}"
-                excludepackagenames="at.mkritzl.ant.test.*"
+                excludepackagenames="at.erceg_kritzl.pi_calculator.tests"
                 defaultexcludes="yes"
                 destdir="${doc.dir}"
                 author="true"
@@ -133,12 +154,4 @@
                 use="true"
                 windowtitle="Test API"/>
     </target>
-
-    <!--&lt;!&ndash;Kopiert das erstellte jar auf einen anderen Rechner oder Direktory&ndash;&gt;-->
-    <!--&lt;!&ndash;Dabei wird das Password abgefragt&ndash;&gt;-->
-    <!--<target name="copy" depends= "jar">-->
-        <!--<local name="scp.password"/>-->
-        <!--<input message="secure-input:" addproperty="scp.password"/>-->
-        <!--<scp file="${jar.dir}${jar.file}" todir="${scp.username}:${scp.password}@${scp.hostname}:${scp.dir}" trust="true"/>-->
-    <!--</target>-->
 </project>

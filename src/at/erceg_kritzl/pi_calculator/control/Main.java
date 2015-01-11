@@ -30,7 +30,6 @@ public class Main {
 
 		Calculator algorithm = new CalculatorAlgorithm();
 
-
 		try {
 			if (cli.isNewBalancer()) {
 				Service service = new CalcService();
