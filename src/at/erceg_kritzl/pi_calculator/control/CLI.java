@@ -21,8 +21,8 @@ public class CLI implements Input {
 	@Option(name = "-s", usage = "specify the names of the server(s) [server1,server2,...]")
 	private String servers;
 
-	@Option(name = "-b", usage = "specify the location of the balancer [rmi://127.0.0.1:77777]")
-	private String balancerUriString = "rmi://127.0.0.1:77777";
+	@Option(name = "-b", usage = "specify the location of the balancer [rmi://127.0.0.1:60000]")
+	private String balancerUriString = "rmi://127.0.0.1:60000";
 
 	@Option(name = "-n", usage = "specify if a new balancer should been build")
 	private String newBalancerString = "false";

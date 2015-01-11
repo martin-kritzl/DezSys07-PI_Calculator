@@ -34,7 +34,7 @@ public class CalcService extends UnicastRemoteObject implements Service, Seriali
 	/**
 	 * @see at.erceg_kritzl.pi_calculator.service.Service#removeServer(java.lang.String)
 	 */
-	public void removeServer(String name) throws RemoteException{
+	public synchronized void removeServer(String name) throws RemoteException{
 		this.servers.remove(name);
 	}
 

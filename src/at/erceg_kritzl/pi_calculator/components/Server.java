@@ -1,5 +1,7 @@
 package at.erceg_kritzl.pi_calculator.components;
 
+import at.erceg_kritzl.pi_calculator.control.Main;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
@@ -11,12 +13,13 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 @SuppressWarnings("serial")
-public class Server implements Calculator, Runnable, Serializable {
-	
+public class Server extends UnicastRemoteObject implements Calculator, Runnable, Serializable{
+
+	//public static final Logger logger = LogManager.getLogger(Server.class);
 	private Calculator alg;
 
 	private String name;
-
+	private String balancerUriName;
 	private ServiceManager sm;
 	
 	public Server(URI balancerUri, String balancerName, Calculator alg, String name, int port) 
@@ -24,6 +27,7 @@ public class Server implements Calculator, Runnable, Serializable {
 
 		this.name = name;
 		this.alg = alg;
+		this.balancerUriName = balancerUri.toString()+"/"+balancerName;
 		
 		/* Damit Verbindungen zugelassen werden, wird am Anfang eine Policy angegeben. */
 		
@@ -32,23 +36,15 @@ public class Server implements Calculator, Runnable, Serializable {
 			try {
 				System.setProperty("java.security.policy",System.class.getResource("/java.policy").toString());
 			}catch(Exception e){
-				System.err.println("policy file: java.policy was not found or could not be set as property");
+				Main.logger.info("policy file: java.policy was not found or could not be set as property");
 			}
             System.setSecurityManager(new SecurityManager());
         }
 		
-		Calculator serverReference = (Calculator) UnicastRemoteObject.exportObject(this, port);
 
-		System.out.println(name+ " will sich bei Balancer "+balancerName+ " unter " + balancerUri.toString()+" anmelden.");
-		sm = (ServiceManager) Naming.lookup(balancerUri.toString() + "/" + balancerName);
-		System.out.println(name+ " hat sich bei Balancer "+balancerName+ " unter " + balancerUri.toString()+".");
-		sm.getService().addServer(this.name, serverReference);
-//		System.out.println(this.sm.getService().getServer("server1").toString());
-//		ServiceManager sm2 = (ServiceManager) Naming.lookup(balancerUri.toString() + "/" + balancerName);
-//		System.out.println(sm2.getService().getServer("server1").toString());
-
-//		Registry registry = LocateRegistry.getRegistry(balancerUri.getHost(), balancerUri.getPort());
-//		registry.rebind(balancerName, (Calculator) UnicastRemoteObject.exportObject(this.sm, balancerUri.getPort()));
+		sm = (ServiceManager) Naming.lookup(this.balancerUriName);
+		Main.logger.info(name + " hat sich bei Balancer " + balancerName + " unter " + this.balancerUriName + " angemeldet.");
+		sm.getService().addServer(this.name, this);
 	}
 
 	public String getName() {
@@ -73,6 +69,7 @@ public class Server implements Calculator, Runnable, Serializable {
 	public void run() {
 		try {
 			this.sm.getService().removeServer(this.name);
+			Main.logger.info(this.getName() + " hat sich bei " + this.balancerUriName + " ab.");
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {

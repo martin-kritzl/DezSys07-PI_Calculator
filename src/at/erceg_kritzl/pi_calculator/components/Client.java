@@ -1,5 +1,7 @@
 package at.erceg_kritzl.pi_calculator.components;
 
+import at.erceg_kritzl.pi_calculator.control.Main;
+
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -23,14 +25,13 @@ public class Client implements Runnable {
         	try {
 				System.setProperty("java.security.policy",System.class.getResource("/java.policy").toString());
 			}catch(Exception e){
-				System.err.println("policy file: java.policy was not found or could not be set as property");
+				Main.logger.error("policy file: java.policy was not found or could not be set as property");
 			}
         	System.setSecurityManager(new SecurityManager());
         }
-        
-        //String balancerUri = "rmi://" + balancerIP + ":" + balancerPort + "/Balancer";
-        System.out.println("Looking for: " + balancerUri.toString() + "/" + balancerName);
+
         this.calc = (Calculator) Naming.lookup(balancerUri.toString() + "/" + balancerName);
+		Main.logger.info("Client fragt Pi von " + balancerUri.toString() + "/" + balancerName + ".");
 		this.nachkommastellen = anzNachkommastellen;
         
 	}
@@ -41,12 +42,17 @@ public class Client implements Runnable {
 
 	@Override
 	public void run() {
+		long timeout = 3000;
 		try {
 			while(true) {
 				BigDecimal pi = getPi(this.nachkommastellen);
 				if (pi!=null) {
 					System.out.println(pi);
 					break;
+				} else {
+					synchronized (this){
+						this.wait(timeout);
+					}
 				}
 			}
 
@@ -54,6 +60,8 @@ public class Client implements Runnable {
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}

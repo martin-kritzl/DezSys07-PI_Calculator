@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Name des Projekts, den standardmaessigen target und den Startordner-->
+<project name="Hello" default="main" basedir=".">
+
+    <!--Definition der Variablen zur erleichterten Aenderung-->
+
+    <!--Bitte nach Anforderungen anpassen-->
+    <property name="scp.username" value="mkritzl"/>
+    <property name="scp.dir" value="/var/www/"/>
+    <property name="scp.hostname" value="10.0.0.25"/>
+
+
+    <property name="build.dir" value="./build2" />
+    <!--${propertyname} ist zur Verwendung der Variablen-->
+    <property name="reports.dir" value="${build.dir}/testreports/" />
+    <property name="doc.dir" value="${build.dir}/javadoc/" />
+    <property name="jar.dir" value="${build.dir}/" />
+    <property name="jar.file" value="${ant.project.name}.jar" />
+    <property name="classes.dir" value="${build.dir}"/>
+    <property name="tests.dir" value="${classes.dir}/test" />
+    <property name="lib.dir" value="./lib/"/>
+    <property name="main.class" value="at.erceg_kritzl.pi_calculator.control.Main"/>
+    <property name="source.dir" value="./src/"/>
+
+    <!--Includieren der notwendigen Libraries fuer scp-->
+    <path id="scp.class.path">
+        <pathelement location="${lib.dir}/jsch-0.1.51.jar"/>
+        <!--Zuruecksetzen des Paths-->
+        <path refid="classpath.base"/>
+    </path>
+
+    <!--Includieren der notwendigen Libraries fuer junit-->
+    <path id="test.class.path">
+        <!--Includieren der Klassen zum Testen-->
+        <pathelement location="${classes.dir}"/>
+        <pathelement location="${lib.dir}/junit-4.11.jar"/>
+        <pathelement location="${lib.dir}/hamcrest-core-1.3.jar"/>
+        <path refid="classpath.base"/>
+    </path>
+
+    <path id="compile.class.path">
+        <pathelement location="${lib.dir}/args4j-2.0.29.jar"/>
+        <pathelement location="${lib.dir}/log4j-1.2.17.jar"/>
+    </path>
+
+    <!--Zuruecksetzen des Paths-->
+    <path id="classpath.base">
+    </path>
+
+    <!--&lt;!&ndash;Definieren des Classloaders&ndash;&gt;-->
+    <!--<taskdef resource="net/jtools/classloadertask/antlib.xml">-->
+        <!--<classpath>-->
+            <!--<fileset dir="${lib.dir}" includes="ant-classloader*.jar"/>-->
+        <!--</classpath>-->
+    <!--</taskdef>-->
+
+    <!--&lt;!&ndash;Ueber den Classloader wird das jsch-0.1.51.jar integriert&ndash;&gt;-->
+    <!--<classloader loader="system">-->
+        <!--<classpath>-->
+            <!--<fileset dir="${lib.dir}" includes="jsch*.jar"/>-->
+        <!--</classpath>-->
+    <!--</classloader>-->
+
+    <!--Startpunkt der Datei-->
+    <!--Depends sind die targets die zuvor ausgefuehrt werden muessen-->
+    <target name="main" depends="clean,run,doc,junitreport"/>
+
+    <!--Loescht alle erstellten Files-->
+    <target name="clean" depends="">
+        <delete dir="${build.dir}" />
+    </target>
+
+    <!--Compiliert alle Klassen und fuegt junit hinzu-->
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${source.dir}" destdir="${classes.dir}">
+            <classpath refid="test.class.path"/>
+            <classpath refid="compile.class.path"/>
+        </javac>
+    </target>
+
+    <!--Erstellt das jarFile und setzt die Main-Klasse-->
+    <target name="jar" depends= "compile, junitreport, doc" >
+        <mkdir dir="${build.dir}/${lib.dir}"/>
+        <copy file="${lib.dir}/log4j-1.2.17.jar" todir="${build.dir}/${lib.dir}"/>
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${jar.file}" basedir="${build.dir}"  excludes="jar">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!--Fuehrt das jar-File aus-->
+    <target name="run" depends="jar" >
+        <java jar="${jar.dir}/${ant.project.name}.jar"
+              fork="true"/>
+    </target>
+
+    <!--Erstellt xml-Files aus den Testfaellen die nachher in html exportiert werden-->
+    <target name="junit">
+        <mkdir dir="${reports.dir}"/>
+        <junit fork="yes" printsummary="no" haltonfailure="no">
+            <batchtest fork="yes" todir="${reports.dir}" >
+                <fileset dir="${classes.dir}">
+                    <include name="**/*Test.class" />
+                </fileset>
+            </batchtest>
+            <formatter type="xml" />
+            <classpath refid="test.class.path" />
+        </junit>
+    </target>
+
+    <!--Erstellt einen html Report und legt ihn unter reports ab-->
+    <target name="junitreport" depends="junit">
+        <junitreport todir="${reports.dir}">
+            <fileset dir="${reports.dir}">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report todir="${reports.dir}" />
+        </junitreport>
+    </target>
+
+    <!--Erstellt javadoc der source-Datein-->
+    <target name="doc" depends="compile">
+        <javadoc
+                sourcepath="${source.dir}"
+                excludepackagenames="at.mkritzl.ant.test.*"
+                defaultexcludes="yes"
+                destdir="${doc.dir}"
+                author="true"
+                version="true"
+                use="true"
+                windowtitle="Test API"/>
+    </target>
+
+    <!--&lt;!&ndash;Kopiert das erstellte jar auf einen anderen Rechner oder Direktory&ndash;&gt;-->
+    <!--&lt;!&ndash;Dabei wird das Password abgefragt&ndash;&gt;-->
+    <!--<target name="copy" depends= "jar">-->
+        <!--<local name="scp.password"/>-->
+        <!--<input message="secure-input:" addproperty="scp.password"/>-->
+        <!--<scp file="${jar.dir}${jar.file}" todir="${scp.username}:${scp.password}@${scp.hostname}:${scp.dir}" trust="true"/>-->
+    <!--</target>-->
+</project>

@@ -7,8 +7,11 @@ import at.erceg_kritzl.pi_calculator.components.Client;
 import at.erceg_kritzl.pi_calculator.components.Server;
 import at.erceg_kritzl.pi_calculator.service.CalcService;
 import at.erceg_kritzl.pi_calculator.service.Service;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -17,6 +20,7 @@ import java.util.concurrent.Executors;
 
 public class Main {
 
+	public static final Logger logger = LogManager.getLogger(Main.class);
 	private static String balancerName = "Balancer";
 	private static int serverPort = 45456;
 
@@ -50,7 +54,10 @@ public class Main {
 			e.printStackTrace();
 		} catch (AlreadyBoundException e) {
 			e.printStackTrace();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
 		}
+//		System.exit(-1);
 	}
 
 }
