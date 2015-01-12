@@ -26,10 +26,13 @@ public class Balancer extends UnicastRemoteObject implements ServiceManager{
 
 	private String name;
 
+	private volatile int countCalls;
+
 	private BalancerAlgorithm balancerAlgorithm;
 
 	public Balancer(String name, int port) throws RemoteException, AlreadyBoundException, UnknownHostException {
 		this.name = name;
+		this.countCalls = 1;
 		this.service = new CalcService();
 		this.alg = new SequenceAlgorithm(this.service);
 		this.registry = LocateRegistry.createRegistry(port);
@@ -51,7 +54,7 @@ public class Balancer extends UnicastRemoteObject implements ServiceManager{
 		if (availableServer!=null) {
 			BigDecimal erg = this.service.getServer(availableServer).pi(anzNachkommastellen);
 			this.alg.releaseServer(availableServer);
-			Main.logger.info(availableServer + " hat pi fuer " + anzNachkommastellen + " Stellen berechnet.");
+			Main.logger.info(availableServer + " hat pi fuer " + anzNachkommastellen + " Stellen berechnet.(Aufruf nr. " + this.countCalls++ + ")");
 			return erg;
 		} else
 			return null;

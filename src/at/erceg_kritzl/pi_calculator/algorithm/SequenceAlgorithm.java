@@ -25,7 +25,7 @@ public class SequenceAlgorithm implements BalancerAlgorithm {
 	 * 
 	 * 
 	 */
-	public String getServerName() throws RemoteException {
+	public synchronized String getServerName() throws RemoteException {
 		this.synchronize();
 
 		if (this.availableServers.size()>0) {
@@ -36,7 +36,7 @@ public class SequenceAlgorithm implements BalancerAlgorithm {
 			return null;
 	}
 
-	public void releaseServer(String name) {
+	public synchronized void releaseServer(String name) {
 		this.availableServers.add(name);
 	}
 

@@ -43,26 +43,27 @@ public class Client implements Runnable {
 	@Override
 	public void run() {
 		long timeout = 3000;
-		try {
-			while(true) {
+		while(true) {
+			try {
+
 				BigDecimal pi = getPi(this.nachkommastellen);
-				if (pi!=null) {
+				if (pi != null) {
 					System.out.println(pi);
 					break;
 				} else {
-					synchronized (this){
+					synchronized (this) {
 						this.wait(timeout);
 					}
 				}
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			} catch (NotBoundException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 
-
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (NotBoundException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
+
 	}
 }
