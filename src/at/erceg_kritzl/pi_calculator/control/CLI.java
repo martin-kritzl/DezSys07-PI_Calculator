@@ -19,23 +19,24 @@ import java.util.List;
  */
 public class CLI implements Input {
 
-	@Option(name = "-c", usage = "specify the number of clients")
+	@Option(name = "-c", usage = "specify the number of clients <default: 0")
 	private Integer countClients = 0;
 
-	@Option(name = "-d", usage = "specify the number of decimal digits from pi")
+	@Option(name = "-d", usage = "specify the number of decimal digits from pi <default: 10>")
 	private Integer digits = 10;
 
-	@Option(name = "-s", usage = "specify the names of the server(s) [server1,server2,...]")
+	@Option(name = "-s", usage = "specify the names of the server(s) [server1,server2,...] <default: no Server>")
 	private String servers;
 
-	@Option(name = "-b", usage = "specify the location of the balancer [rmi://127.0.0.1:60000]")
-	private String balancerUriString = "rmi://127.0.0.1:60000";
+	@Option(name = "-b", usage = "specify the location of the balancer <default: rmi://127.0.0.1:60000/Balancer>")
+	private String balancerUriString = "rmi://127.0.0.1:60000/Balancer";
 
-	@Option(name = "-n", usage = "specify if a new balancer should been build")
+	@Option(name = "-n", usage = "specify if a new balancer should been build <default: false>")
 	private String newBalancerString = "false";
 
 	private boolean newBalancer = false;
 	private URI balancerUri;
+	private String balancerName;
 
 
 	/**
@@ -54,15 +55,19 @@ public class CLI implements Input {
 				this.newBalancer = true;
 			else if (!this.newBalancerString.equals("false"))
 				throw new CmdLineException(parser, Messages.DEFAULT_META_EXPLICIT_BOOLEAN_OPTION_HANDLER, this.newBalancerString);
-
-			this.balancerUri = new URI(this.balancerUriString);
+			if (this.balancerUriString.indexOf("rmi://")==-1 || this.balancerUriString.substring(this.balancerUriString.lastIndexOf("/")+1, this.balancerUriString.length())==null)
+				throw new CmdLineException(parser, Messages.DEFAULT_META_EXPLICIT_BOOLEAN_OPTION_HANDLER, this.balancerUriString);
+			this.balancerName = this.balancerUriString.substring(this.balancerUriString.lastIndexOf("/")+1, this.balancerUriString.length());
+			this.balancerUri = new URI(this.balancerUriString.substring(0, this.balancerUriString.lastIndexOf("/")));
 
 		} catch (CmdLineException e) {
 			// if something went wrong the help is printed
 
 			this.inputError(e, parser);
+			System.exit(0);
 		} catch (URISyntaxException e) {
 			this.inputError(e, parser);
+			System.exit(0);
 		}
 	}
 
@@ -79,7 +84,9 @@ public class CLI implements Input {
 		System.exit(1);
 	}
 
-	@Override
+	/**
+	 * @see Input#getCountClients()
+	 */
 	public int getCountClients() {
 		return this.countClients;
 	}
@@ -90,9 +97,7 @@ public class CLI implements Input {
 	}
 
 	/**
-	 * Macht aus der Angabe des Benutzers eine Uri und gibt diese zurueck
-	 *
-	 * @return URI
+	 * @see Input#getBalancerUri()
 	 */
 	@Override
 	public URI getBalancerUri() {
@@ -100,11 +105,15 @@ public class CLI implements Input {
 	}
 
 	/**
-	 * Erstellt aus dem eingegebenen String des Benutzers, eine Liste der Servernamen
-	 *
-	 * @return Liste der Servernamen
+	 * @see Input#getBalancerName()
 	 */
-	@Override
+	public String getBalancerName() {
+		return this.balancerName;
+	}
+
+	/**
+	 * @see Input#getServers()
+	 */
 	public List<String> getServers() {
 		if (this.servers!=null)
 			return Arrays.asList(this.servers.split(","));
@@ -113,11 +122,8 @@ public class CLI implements Input {
 	}
 
 	/**
-	 * Gibt zurueck, ob ein neuer Balancer erstellt werden soll
-	 *
-	 * @return boolean
+	 * @see Input#isNewBalancer()
 	 */
-	@Override
 	public boolean isNewBalancer() {
 		return this.newBalancer;
 	}

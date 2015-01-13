@@ -22,8 +22,9 @@ public interface Service extends Remote{
 	 *
 	 * @param name Name des Servers
 	 * @param calc Objectreferenz auf den Server
+	 * @return Ob der Server hinzugefuegt werden konnte
 	 */
-	public void addServer(String name, Calculator calc) throws RemoteException, AlreadyBoundException;
+	public boolean addServer(String name, Calculator calc) throws RemoteException, AlreadyBoundException;
 
 	/**
 	 * Loescht einen Server aus der Registry.

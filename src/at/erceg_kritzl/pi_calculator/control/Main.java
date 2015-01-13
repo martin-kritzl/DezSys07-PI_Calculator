@@ -28,7 +28,6 @@ import java.util.concurrent.Executors;
 public class Main {
 
 	public static final Logger logger = LogManager.getLogger(Main.class);
-	private static String balancerName = "Balancer";
 	private static int serverPort = 45456;
 
 	public static void main(String[] args) {
@@ -39,28 +38,33 @@ public class Main {
 
 		try {
 			if (cli.isNewBalancer()) {
-				new Balancer(balancerName, cli.getBalancerUri().getPort());
+				new Balancer(cli.getBalancerName(), cli.getBalancerUri().getPort());
 			}
 			if (cli.getServers()!=null)
 				for (String server : cli.getServers()) {
-					Thread t = new Thread(new Server(cli.getBalancerUri(), balancerName, algorithm, server, serverPort++));
+					Thread t = new Thread(new Server(cli.getBalancerUri(), cli.getBalancerName(), algorithm, server, serverPort++));
 					//Runtime.getRuntime().addShutdownHook(t);
 				}
 			if (cli.getCountClients()!=0)
 				for (int i = 0; i < cli.getCountClients(); i++) {
 					ExecutorService clients = Executors.newFixedThreadPool(cli.getCountClients());
-					clients.execute(new Client(cli.getBalancerUri(), balancerName, cli.getDigits()));
+					clients.execute(new Client(cli.getBalancerUri(), cli.getBalancerName(), cli.getDigits()));
 				}
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			logger.error("Die Verbindung konnte nicht aufgebaut werden");
+			System.exit(-1);
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			logger.error("Falsche Angabe der URI des Balancers");
+			System.exit(-1);
 		} catch (NotBoundException e) {
-			e.printStackTrace();
+			logger.error("Der Balancer konnte unter der URI nicht erreicht werden");
+			System.exit(-1);
 		} catch (AlreadyBoundException e) {
-			e.printStackTrace();
+			logger.error("Der Name des Servers ist bereits belegt");
+			System.exit(-1);
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			logger.error("IP-Adresse des Balancers ist inkorrekt");
+			System.exit(-1);
 		}
 //		System.exit(-1);
 	}

@@ -33,8 +33,13 @@ public class CalcService extends UnicastRemoteObject implements Service, Seriali
 	/**
 	 * @see at.erceg_kritzl.pi_calculator.service.Service#addServer(java.lang.String, at.erceg_kritzl.pi_calculator.components.Calculator)
 	 */
-	public synchronized void addServer(String name, Calculator calc)throws RemoteException {
-		this.servers.put(name, calc);
+	public synchronized boolean addServer(String name, Calculator calc)throws RemoteException {
+		if (this.servers.containsKey(name))
+			return false;
+		else {
+			this.servers.put(name, calc);
+			return true;
+		}
 	}
 
 

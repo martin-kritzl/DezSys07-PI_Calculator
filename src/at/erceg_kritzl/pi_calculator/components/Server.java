@@ -63,6 +63,8 @@ public class Server extends UnicastRemoteObject implements Calculator, Runnable,
 
 		sm = (ServiceManager) Naming.lookup(this.balancerUriName);
 		Main.logger.info(name + " hat sich bei Balancer " + registryName + " unter " + this.balancerUriName + " angemeldet.");
+		if (!sm.getService().addServer(this.name, this))
+			throw new AlreadyBoundException();
 		sm.getService().addServer(this.name, this);
 		new Thread(this).setDaemon(true);
 	}

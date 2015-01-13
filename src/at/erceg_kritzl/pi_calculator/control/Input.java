@@ -29,6 +29,8 @@ public interface Input {
 	 */
 	public URI getBalancerUri();
 
+	public String getBalancerName();
+
 	/**
 	 * Erstellt aus dem eingegebenen String des Benutzers, eine Liste der Servernamen
 	 *
