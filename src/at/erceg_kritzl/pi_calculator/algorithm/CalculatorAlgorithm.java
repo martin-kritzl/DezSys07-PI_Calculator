@@ -4,6 +4,13 @@ import at.erceg_kritzl.pi_calculator.components.Calculator;
 
 import java.math.BigDecimal;
 
+/**
+ * Berechnet Pi durch Angabe der Nachkommastellen.
+ *
+ * @author Stefan Erceg
+ * @author Martin Kritzl
+ * @version 20150113
+ */
 public class CalculatorAlgorithm implements Calculator {
 
     /** constants used in pi computation */

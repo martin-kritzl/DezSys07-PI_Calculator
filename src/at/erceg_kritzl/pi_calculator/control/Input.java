@@ -3,6 +3,13 @@ package at.erceg_kritzl.pi_calculator.control;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * Stellt die Verarbeitung der Benutzereingaben dar.
+ *
+ * @author Stefan Erceg
+ * @author Martin Kritzl
+ * @version 20150113
+ */
 public interface Input {
 
 	/**

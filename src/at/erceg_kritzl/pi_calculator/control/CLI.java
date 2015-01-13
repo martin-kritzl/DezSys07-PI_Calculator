@@ -10,6 +10,13 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Parst die Eingaben des Benutzers und gibt bei einem Fehler die korrekte Verwendung aus
+ *
+ * @author Stefan Erceg
+ * @author Martin Kritzl
+ * @version 20150113
+ */
 public class CLI implements Input {
 
 	@Option(name = "-c", usage = "specify the number of clients")
@@ -59,6 +66,12 @@ public class CLI implements Input {
 		}
 	}
 
+	/**
+	 * Gibt die korrekte Verwendung des Programms aus.
+	 *
+	 * @param e Ausgeloeste Exception
+	 * @param parser Comand Line Parser
+	 */
 	private void inputError(Exception e, CmdLineParser parser) {
 		System.err.println("java -jar CalcPi [options...] arguments...");
 		parser.printUsage(System.err);

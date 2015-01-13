@@ -8,6 +8,13 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Set;
 
+/**
+ * Stellt ein Service dar, bei dem Calculator verwaltet werden.
+ *
+ * @author Stefan Erceg
+ * @author Martin Kritzl
+ * @version 20150113
+ */
 public interface Service extends Remote{
 
 	/**

@@ -18,6 +18,13 @@ import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Fuehrt das Programm aus
+ *
+ * @author Stefan Erceg
+ * @author Martin Kritzl
+ * @version 20150113
+ */
 public class Main {
 
 	public static final Logger logger = LogManager.getLogger(Main.class);
@@ -32,13 +39,12 @@ public class Main {
 
 		try {
 			if (cli.isNewBalancer()) {
-				Service service = new CalcService();
 				new Balancer(balancerName, cli.getBalancerUri().getPort());
 			}
 			if (cli.getServers()!=null)
 				for (String server : cli.getServers()) {
 					Thread t = new Thread(new Server(cli.getBalancerUri(), balancerName, algorithm, server, serverPort++));
-					Runtime.getRuntime().addShutdownHook(t);
+					//Runtime.getRuntime().addShutdownHook(t);
 				}
 			if (cli.getCountClients()!=0)
 				for (int i = 0; i < cli.getCountClients(); i++) {

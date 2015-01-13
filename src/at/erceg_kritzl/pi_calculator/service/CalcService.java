@@ -14,6 +14,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Stellt ein Service dar, bei dem Calculator verwaltet werden.
+ *
+ * @author Stefan Erceg
+ * @author Martin Kritzl
+ * @version 20150113
+ */
 public class CalcService extends UnicastRemoteObject implements Service, Serializable {
 
 	private Map<String, Calculator> servers;
