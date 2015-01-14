@@ -10,7 +10,6 @@ package at.erceg_kritzl.pi_calculator.tests;
  */
 import static org.junit.Assert.assertEquals;
 
-import java.math.BigDecimal;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
