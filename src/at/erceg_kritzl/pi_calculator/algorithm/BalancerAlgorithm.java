@@ -12,7 +12,7 @@ import java.rmi.RemoteException;
 public interface BalancerAlgorithm {
 
 	/**
-	 * Gibt einen verfuegbaren Client zurueck und setzt diesen fuer andere Aufrufe auf beschaeftigt.
+	 * Gibt einen verfuegbaren Server zurueck und setzt diesen fuer andere Aufrufe auf beschaeftigt.
 	 *
 	 * @return Gibt einen verfuegbaren Server zurueck
 	 * @throws RemoteException
