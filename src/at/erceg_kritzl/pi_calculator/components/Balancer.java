@@ -41,7 +41,7 @@ public class Balancer extends UnicastRemoteObject implements ServiceManager{
 
 	private BalancerAlgorithm balancerAlgorithm;
 
-	private static final Logger logger = LogManager.getLogger(Client.class);
+	private static final Logger logger = LogManager.getLogger(Balancer.class);
 
 	/**
 	 * Initialisiert einen Service und schreibt sich selber in die Registry

@@ -1,5 +1,7 @@
 package at.erceg_kritzl.pi_calculator.control;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -38,6 +40,8 @@ public class CLI implements Input {
 	private URI balancerUri;
 	private String balancerName;
 
+	private static final Logger logger = LogManager.getLogger(CLI.class);
+
 
 	/**
 	 * @see Input#parseArgs(java.lang.String[])
@@ -55,7 +59,9 @@ public class CLI implements Input {
 				this.newBalancer = true;
 			else if (!this.newBalancerString.equals("false"))
 				throw new CmdLineException(parser, Messages.DEFAULT_META_EXPLICIT_BOOLEAN_OPTION_HANDLER, this.newBalancerString);
-			if (this.balancerUriString.indexOf("rmi://")==-1 || this.balancerUriString.substring(this.balancerUriString.lastIndexOf("/")+1, this.balancerUriString.length())==null)
+			String uri = this.balancerUriString.substring(0, this.balancerUriString.lastIndexOf("/"));
+			String name = this.balancerUriString.substring(this.balancerUriString.lastIndexOf("/")+1, this.balancerUriString.length());
+			if (uri.indexOf("rmi://")==-1 || name==null)
 				throw new CmdLineException(parser, Messages.DEFAULT_META_EXPLICIT_BOOLEAN_OPTION_HANDLER, this.balancerUriString);
 			this.balancerName = this.balancerUriString.substring(this.balancerUriString.lastIndexOf("/")+1, this.balancerUriString.length());
 			this.balancerUri = new URI(this.balancerUriString.substring(0, this.balancerUriString.lastIndexOf("/")));
@@ -64,10 +70,10 @@ public class CLI implements Input {
 			// if something went wrong the help is printed
 
 			this.inputError(e, parser);
-			System.exit(0);
+			//System.exit(0);
 		} catch (URISyntaxException e) {
 			this.inputError(e, parser);
-			System.exit(0);
+			//System.exit(0);
 		}
 	}
 
@@ -78,10 +84,9 @@ public class CLI implements Input {
 	 * @param parser Comand Line Parser
 	 */
 	private void inputError(Exception e, CmdLineParser parser) {
-		System.err.println("java -jar CalcPi [options...] arguments...");
+		logger.info("java -jar CalcPi [options...] arguments...");
 		parser.printUsage(System.err);
-		System.err.println();
-		System.exit(1);
+		//System.exit(1);
 	}
 
 	/**
