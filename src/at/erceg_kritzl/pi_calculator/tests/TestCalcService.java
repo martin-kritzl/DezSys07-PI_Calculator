@@ -8,8 +8,9 @@ package at.erceg_kritzl.pi_calculator.tests;
  * @author Martin Kritzl
  * @version 20150114
  */
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -105,6 +106,23 @@ public class TestCalcService {
 		
 		serv.addServer("server1", calc);
 		assertEquals(false, serv.removeServer("server5000"));
+		
+	}
+	
+	/**
+	 * Bei dieser Methode wird 1 Server zu einem Service hinzugefuegt. Mittels der Methode "getServer()" wird eine Referenz auf eine
+	 * Serverreferenz zurueckgegeben, womit die Methode "pi(nachkommastellen)" ausgefuehrt werden kann. Getestet wird, ob bei der Eingabe
+	 * der gewuenschten Nachkommastellen von Pi das korrekte Ergebnis herauskommt.
+	 * @throws RemoteException
+	 * @throws AlreadyBoundException
+	 * @throws NotBoundException
+	 */
+	
+	@Test
+	public void testGetServerReference() throws RemoteException, AlreadyBoundException, NotBoundException {
+		
+		serv.addServer("server1", calc);
+		assertEquals(3.141, serv.getServer("server1").pi(3).doubleValue(), 0.001);	
 		
 	}
 	
