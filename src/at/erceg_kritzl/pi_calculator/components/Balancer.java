@@ -39,8 +39,6 @@ public class Balancer extends UnicastRemoteObject implements ServiceManager{
 
 	private volatile int countCalls;
 
-	private BalancerAlgorithm balancerAlgorithm;
-
 	private static final Logger logger = LogManager.getLogger(Balancer.class);
 
 	/**
