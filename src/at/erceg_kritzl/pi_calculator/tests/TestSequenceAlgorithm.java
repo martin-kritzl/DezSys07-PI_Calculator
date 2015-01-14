@@ -1,8 +1,8 @@
 package at.erceg_kritzl.pi_calculator.tests;
 
 /**
- * In dieser Testklasse wird die Klasse 'SequenceAlgorithm' getestet. Dabei werden die Methoden getestet, bei der ein verfuegbarer Server
- * auf beschaeftigt gesetzt und bei der ein bestimmter Server wieder fuer neue Anfragen freigegeben wird.
+ * In dieser Testklasse wird die Klasse 'SequenceAlgorithm' getestet. Dabei werden die Methoden getestet, mit der ein verfuegbarer Server
+ * auf beschaeftigt gesetzt und mit der ein bestimmter Server wieder fuer neue Anfragen freigegeben wird.
  *
  * @author Stefan Erceg
  * @author Martin Kritzl
