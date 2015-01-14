@@ -5,6 +5,8 @@ import at.erceg_kritzl.pi_calculator.algorithm.SequenceAlgorithm;
 import at.erceg_kritzl.pi_calculator.control.Main;
 import at.erceg_kritzl.pi_calculator.service.CalcService;
 import at.erceg_kritzl.pi_calculator.service.Service;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.net.InetAddress;
@@ -39,6 +41,8 @@ public class Balancer extends UnicastRemoteObject implements ServiceManager{
 
 	private BalancerAlgorithm balancerAlgorithm;
 
+	private static final Logger logger = LogManager.getLogger(Client.class);
+
 	/**
 	 * Initialisiert einen Service und schreibt sich selber in die Registry
 	 *
@@ -55,7 +59,7 @@ public class Balancer extends UnicastRemoteObject implements ServiceManager{
 		this.alg = new SequenceAlgorithm(this.service);
 		this.registry = LocateRegistry.createRegistry(port);
 		this.registry.bind(this.name, this);
-		Main.logger.info(name + " hat sich unter " + InetAddress.getLocalHost().getHostAddress() + " angemeldet.");
+		logger.info(name + " hat sich unter " + InetAddress.getLocalHost().getHostAddress() + " angemeldet.");
 	}
 
 	/**
@@ -77,7 +81,7 @@ public class Balancer extends UnicastRemoteObject implements ServiceManager{
 				//Berechnet ueber einen Server Pi
 				erg = this.service.getServer(availableServer).pi(anzNachkommastellen);
 				this.alg.releaseServer(availableServer);
-				Main.logger.info(availableServer + " hat pi fuer " + anzNachkommastellen + " Stellen berechnet.(Aufruf nr. " + this.countCalls++ + ")");
+				logger.info(availableServer + " hat pi fuer " + anzNachkommastellen + " Stellen berechnet.(Aufruf nr. " + this.countCalls++ + ")");
 				return erg;
 			} catch (ConnectException e) {
 				//Wenn die Connection zum Server nicht gegeben ist wird dieser entfernt

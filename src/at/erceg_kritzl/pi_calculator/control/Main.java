@@ -27,7 +27,7 @@ import java.util.concurrent.Executors;
  */
 public class Main {
 
-	public static final Logger logger = LogManager.getLogger(Main.class);
+	private static final Logger logger = LogManager.getLogger(Main.class);
 	private static int serverPort = 45456;
 
 	public static void main(String[] args) {

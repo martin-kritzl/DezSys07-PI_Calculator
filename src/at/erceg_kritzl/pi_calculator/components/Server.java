@@ -1,6 +1,8 @@
 package at.erceg_kritzl.pi_calculator.components;
 
 import at.erceg_kritzl.pi_calculator.control.Main;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -27,6 +29,8 @@ public class Server extends UnicastRemoteObject implements Calculator, Runnable,
 	private String name;
 	private String balancerUriName;
 	private ServiceManager sm;
+
+	private static final Logger logger = LogManager.getLogger(Server.class);
 
 	/**
 	 * Der Server registriert sich in der Registry des Balancers
@@ -55,14 +59,14 @@ public class Server extends UnicastRemoteObject implements Calculator, Runnable,
 			try {
 				System.setProperty("java.security.policy",System.class.getResource("/java.policy").toString());
 			}catch(Exception e){
-				Main.logger.info("policy file: java.policy was not found or could not be set as property");
+				logger.info("policy file: java.policy was not found or could not be set as property");
 			}
             System.setSecurityManager(new SecurityManager());
         }
 		
 
 		sm = (ServiceManager) Naming.lookup(this.balancerUriName);
-		Main.logger.info(name + " hat sich bei Balancer " + registryName + " unter " + this.balancerUriName + " angemeldet.");
+		logger.info(name + " hat sich bei Balancer " + registryName + " unter " + this.balancerUriName + " angemeldet.");
 		if (!sm.getService().addServer(this.name, this))
 			throw new AlreadyBoundException();
 		sm.getService().addServer(this.name, this);
@@ -91,7 +95,7 @@ public class Server extends UnicastRemoteObject implements Calculator, Runnable,
 	public void run() {
 		try {
 			this.sm.getService().removeServer(this.name);
-			Main.logger.info(this.getName() + " hat sich bei " + this.balancerUriName + " ab.");
+			logger.info(this.getName() + " hat sich bei " + this.balancerUriName + " ab.");
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		} catch (NotBoundException e) {

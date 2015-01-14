@@ -1,6 +1,8 @@
 package at.erceg_kritzl.pi_calculator.components;
 
 import at.erceg_kritzl.pi_calculator.control.Main;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
@@ -22,6 +24,8 @@ public class Client implements Runnable {
 	
 	private Calculator calc;
 
+	private static final Logger logger = LogManager.getLogger(Client.class);
+
 	/**
 	 * Verbindet sich mit dem Calculator und bekommt die Refernez des berechnenden Objekts.
 	 *
@@ -42,14 +46,14 @@ public class Client implements Runnable {
         	try {
 				System.setProperty("java.security.policy",System.class.getResource("/java.policy").toString());
 			}catch(Exception e){
-				Main.logger.error("policy file: java.policy was not found or could not be set as property");
+				logger.error("policy file: java.policy was not found or could not be set as property");
 			}
         	System.setSecurityManager(new SecurityManager());
         }
 
 		//Die Refeferenz des Balancers wird ermittelt.
         this.calc = (Calculator) Naming.lookup(registryUri.toString() + "/" + registryName);
-		Main.logger.info("Client fragt Pi von " + registryUri.toString() + "/" + registryName + ".");
+		logger.info("Client fragt Pi von " + registryUri.toString() + "/" + registryName + ".");
 		this.nachkommastellen = anzNachkommastellen;
         
 	}
@@ -69,7 +73,7 @@ public class Client implements Runnable {
 	/**
 	 * Fragt den Calculator nach Pi. Bei der Rueckgabe von null, wird die Anfrage erneut gesendet.
 	 */
-	@Override
+
 	public void run() {
 		long timeout = 3000;
 		while(true) {
@@ -79,20 +83,21 @@ public class Client implements Runnable {
 				if (pi != null) {
 					System.out.println(pi);
 					break;
-				//Sollte Pi nicht ermittelt werden koennen wird eine erneute Anfrage erstellt.
+					//Sollte Pi nicht ermittelt werden koennen wird eine erneute Anfrage erstellt.
 				} else {
 					synchronized (this) {
 						this.wait(timeout);
 					}
 				}
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			} catch (NotBoundException e) {
-				e.printStackTrace();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+			} catch (RemoteException e) {
+				logger.error("Die Verbindung konnte nicht aufgebaut werden");
+				System.exit(-1);
+			} catch (NotBoundException e) {
+				logger.error("Der Balancer konnte unter der URI nicht erreicht werden");
+				System.exit(-1);
 			}
-
 		}
 
 	}
