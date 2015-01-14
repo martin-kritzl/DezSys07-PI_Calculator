@@ -10,7 +10,7 @@
     <property name="scp.hostname" value="10.0.0.25"/>
 
 
-    <property name="build.dir" value="./build" />
+    <property name="build.dir" value="./build3" />
     <!--${propertyname} ist zur Verwendung der Variablen-->
     <property name="reports.dir" value="${build.dir}/testreports/" />
     <property name="doc.dir" value="${build.dir}/javadoc/" />
@@ -38,6 +38,8 @@
         <pathelement location="${classes.dir}"/>
         <pathelement location="${lib.dir}/junit-4.11.jar"/>
         <pathelement location="${lib.dir}/hamcrest-core-1.3.jar"/>
+        <pathelement location="${lib.dir}/log4j-1.2.17.jar"/>
+        <pathelement location="${lib.dir}/args4j-2.0.29.jar"/>
         <path refid="classpath.base"/>
     </path>
 
@@ -101,7 +103,7 @@
         <junit fork="yes" printsummary="no" haltonfailure="no">
             <batchtest fork="yes" todir="${reports.dir}" >
                 <fileset dir="${classes.dir}">
-                    <include name="**/*Test.class" />
+                    <include name="**/*Test*.class" />
                 </fileset>
             </batchtest>
             <formatter type="xml" />

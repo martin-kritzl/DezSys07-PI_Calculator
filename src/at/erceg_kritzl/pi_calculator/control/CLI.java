@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class CLI implements Input {
 
-	@Option(name = "-c", usage = "specify the number of clients <default: 0")
+	@Option(name = "-c", usage = "specify the number of clients <default: 0>")
 	private Integer countClients = 0;
 
 	@Option(name = "-d", usage = "specify the number of decimal digits from pi <default: 10>")
@@ -84,7 +84,7 @@ public class CLI implements Input {
 	 * @param parser Comand Line Parser
 	 */
 	private void inputError(Exception e, CmdLineParser parser) {
-		logger.info("java -jar CalcPi [options...] arguments...");
+		logger.info("java -jar <Filename.jar> [options...] arguments...");
 		parser.printUsage(System.err);
 		//System.exit(1);
 	}

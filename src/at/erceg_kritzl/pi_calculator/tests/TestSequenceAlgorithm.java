@@ -1,13 +1,5 @@
 package at.erceg_kritzl.pi_calculator.tests;
 
-/**
- * In dieser Testklasse wird die Klasse 'SequenceAlgorithm' getestet. Dabei werden die Methoden getestet, mit der ein verfuegbarer Server
- * auf beschaeftigt gesetzt und mit der ein bestimmter Server wieder fuer neue Anfragen freigegeben wird.
- *
- * @author Stefan Erceg
- * @author Martin Kritzl
- * @version 20150114
- */
 import static org.junit.Assert.*;
 
 import java.rmi.AlreadyBoundException;
@@ -24,6 +16,14 @@ import at.erceg_kritzl.pi_calculator.components.Calculator;
 import at.erceg_kritzl.pi_calculator.service.CalcService;
 import at.erceg_kritzl.pi_calculator.service.Service;
 
+/**
+ * In dieser Testklasse wird die Klasse 'SequenceAlgorithm' getestet. Dabei werden die Methoden getestet, mit der ein verfuegbarer Server
+ * auf beschaeftigt gesetzt und mit der ein bestimmter Server wieder fuer neue Anfragen freigegeben wird.
+ *
+ * @author Stefan Erceg
+ * @author Martin Kritzl
+ * @version 20150114
+ */
 public class TestSequenceAlgorithm {
 
 	private Service serv;
