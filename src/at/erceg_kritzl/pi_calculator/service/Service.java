@@ -30,8 +30,9 @@ public interface Service extends Remote{
 	 * Loescht einen Server aus der Registry.
 	 *
 	 * @param name Name des zu loeschenden Servers
+	 * @return Ob der Server geloescht werden konnte
 	 */
-	public void removeServer(String name) throws RemoteException, NotBoundException;
+	public boolean removeServer(String name) throws RemoteException, NotBoundException;
 
 	/**
 	 * Gibt die Referenz auf eine Serverreferenz zurueck.
