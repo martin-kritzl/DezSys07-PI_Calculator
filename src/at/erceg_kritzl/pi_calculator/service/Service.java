@@ -34,13 +34,6 @@ public interface Service extends Remote{
 	 */
 	public boolean removeServer(String name) throws RemoteException, NotBoundException;
 
-	/**
-	 * Gibt die Referenz auf eine Serverreferenz zurueck.
-	 *
-	 * @param name Name des Servers
-	 * @return Server
-	 */
-	public abstract Calculator getServer(String name) throws RemoteException, NotBoundException;
 
 	/**
 	 * Gibt eine Liste der Namen der eingetragenen Server zurueck.
@@ -48,13 +41,5 @@ public interface Service extends Remote{
 	 * @return Liste der Namen der Server
 	 */
 	public Set<String> getServerNames() throws RemoteException;
-
-	/**
-	 * Gibt die URI des Balancers und damit auch der Registry zurueck.
-	 *
-	 * @return URI des Balancers
-
-	public abstract URI getUri();
-	*/
 
 }

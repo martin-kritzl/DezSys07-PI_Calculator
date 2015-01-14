@@ -1,18 +1,13 @@
 package at.erceg_kritzl.pi_calculator.service;
 
-import at.erceg_kritzl.pi_calculator.components.Calculator;
-
 import java.io.Serializable;
-import java.net.URI;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import at.erceg_kritzl.pi_calculator.components.Calculator;
 
 /**
  * Stellt ein Service dar, bei dem Calculator verwaltet werden.
@@ -52,14 +47,6 @@ public class CalcService extends UnicastRemoteObject implements Service, Seriali
 			return true;
 		}else
 			return false;
-	}
-
-
-	/**
-	 * @see at.erceg_kritzl.pi_calculator.service.Service#getServer(java.lang.String)
-	 */
-	public Calculator getServer(String name) throws RemoteException{
-		return this.servers.get(name);
 	}
 
 
