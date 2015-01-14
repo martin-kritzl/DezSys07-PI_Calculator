@@ -51,6 +51,14 @@ public class CalcService extends UnicastRemoteObject implements Service, Seriali
 
 
 	/**
+	* @see at.erceg_kritzl.pi_calculator.service.Service#getServer(java.lang.String)
+	*/
+	public Calculator getServer(String name) throws RemoteException{
+		return this.servers.get(name);
+	}
+	
+	
+	/**
 	 * @see at.erceg_kritzl.pi_calculator.service.Service#getServerNames()
 	 * 
 	 *  
