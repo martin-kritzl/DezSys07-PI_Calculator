@@ -10,7 +10,7 @@
     <property name="scp.hostname" value="10.0.0.25"/>
 
 
-    <property name="build.dir" value="./build3" />
+    <property name="build.dir" value="./build4" />
     <!--${propertyname} ist zur Verwendung der Variablen-->
     <property name="reports.dir" value="${build.dir}/testreports/" />
     <property name="doc.dir" value="${build.dir}/javadoc/" />
@@ -22,7 +22,7 @@
     <property name="main.class" value="at.erceg_kritzl.pi_calculator.control.Main"/>
     <property name="source.dir" value="./src/"/>
     <property name="ressource.dir" value="./resources"/>
-    <property name="includes.dir" value="./files/*"/>
+    <property name="includes.dir" value=""/>
 
 
     <!--Includieren der notwendigen Libraries fuer scp-->
@@ -138,10 +138,10 @@
             <fileset dir="${ressource.dir}"
                      includes="*" />
         </copy>
-        <copy todir="${build.dir}/">
-            <fileset dir="."
-                     includes="${includes.dir}" />
-        </copy>
+        <!--<copy todir="${build.dir}/">-->
+            <!--<fileset dir="."-->
+                     <!--includes="${includes.dir}" />-->
+        <!--</copy>-->
     </target>
 
     <!--Erstellt javadoc der source-Datein-->

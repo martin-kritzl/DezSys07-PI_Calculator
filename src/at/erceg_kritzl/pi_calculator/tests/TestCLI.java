@@ -1,16 +1,11 @@
 package at.erceg_kritzl.pi_calculator.tests;
 
-import at.erceg_kritzl.pi_calculator.algorithm.CalculatorAlgorithm;
-import at.erceg_kritzl.pi_calculator.components.Balancer;
-import at.erceg_kritzl.pi_calculator.components.Calculator;
 import at.erceg_kritzl.pi_calculator.control.CLI;
 import at.erceg_kritzl.pi_calculator.control.Input;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
@@ -28,12 +23,12 @@ import static org.junit.Assert.assertTrue;
 public class TestCLI {
 
     private Input input;
-    private TestAppender testAppender;
+    private Appender testAppender;
 
     @Before
     public void initialize() {
         this.input = new CLI();
-        this.testAppender = new TestAppender();
+        this.testAppender = new Appender();
         Logger.getRootLogger().addAppender(testAppender);
     }
 

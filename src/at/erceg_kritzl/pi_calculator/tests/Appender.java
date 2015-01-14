@@ -6,7 +6,7 @@ import org.apache.log4j.spi.LoggingEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-class TestAppender extends AppenderSkeleton {
+public class Appender extends AppenderSkeleton {
     private final List<LoggingEvent> log = new ArrayList<LoggingEvent>();
 
     @Override
@@ -15,7 +15,7 @@ class TestAppender extends AppenderSkeleton {
     }
 
     @Override
-    protected void append(final LoggingEvent loggingEvent) {
+    public void append(final LoggingEvent loggingEvent) {
         log.add(loggingEvent);
     }
 
